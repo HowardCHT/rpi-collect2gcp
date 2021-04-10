@@ -1,0 +1,12 @@
+[Unit]
+Description=CJMCU-8128 data upload service
+Requires=rpi-sensor.service
+After=rpi-sensor.service
+
+[Service]
+Type=simple
+ExecStart=/app/services/rpi-collect2gcp/.venv/bin/python /app/services/rpi-collect2gcp/app.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
