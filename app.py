@@ -6,6 +6,7 @@ from time import sleep
 load_dotenv()
 
 if __name__ == "__main__":
+    pi_id = os.getenv('PI_ID')
     url_getdata = os.getenv('URL_GETDATA')
     url_cloudfunction = os.getenv('URL_CLOUDFUNCTION')
     upload_interval = int(os.getenv('UPLOAD_INTERVAL', default=30))
@@ -19,9 +20,12 @@ if __name__ == "__main__":
             print("-------- Get RPi sensor data --------")
             RPi_requests = requests.get(url_getdata)
             print(f"Return code => {RPi_requests.status_code}")
+
             if RPi_requests.ok:
                 CJMCU_data = RPi_requests.json()
                 print(CJMCU_data)
+                CJMCU_data['pi_id'] = pi_id
+                
                 r = requests.post(url_cloudfunction, json=CJMCU_data)
                 print(f"Post to cloud function return code => {r.status_code}")
             else:
